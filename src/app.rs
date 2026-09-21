@@ -63,7 +63,7 @@ use windows_numerics::Vector2;
 
 const SETTINGS_HTML: &str = include_str!("../assets/settings.html");
 /// Where the in-app "support" button points.
-pub const SUPPORT_URL: &str = "https://buymeacoffee.com/cywinskiweb";
+pub const SUPPORT_URL: &str = "https://buymeacoffee.com/jakub_webdev";
 pub const REPO_URL: &str = "https://github.com/Cywinskiweb/clipcywin";
 
 // Menu command ids

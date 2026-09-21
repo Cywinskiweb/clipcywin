@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://buymeacoffee.com/cywinskiweb"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95-ffdd00?style=flat-square" alt="Buy me a coffee"></a>
+  <a href="https://buymeacoffee.com/jakub_webdev"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95-ffdd00?style=flat-square" alt="Buy me a coffee"></a>
   <img src="https://img.shields.io/badge/Windows-11-0078d4?style=flat-square" alt="Windows 11">
   <img src="https://img.shields.io/badge/Rust-2021-orange?style=flat-square" alt="Rust">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT">
@@ -101,7 +101,7 @@ Everything lives in `%LOCALAPPDATA%\Clipcywin\settings.json` and is editable fro
 
 ## Support
 
-Clipcywin is free and open source. If it saves you time, you can [buy me a coffee](https://buymeacoffee.com/cywinskiweb). There is also a button for it in Settings › About.
+Clipcywin is free and open source. If it saves you time, you can [buy me a coffee](https://buymeacoffee.com/jakub_webdev). There is also a button for it in Settings › About.
 
 ## License
 
