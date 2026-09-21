@@ -28,9 +28,9 @@ The bar above the taskbar: numbered pills, masked passwords, the modifier hint o
 
 ![Clipcywin bar](docs/bar.png)
 
-Island mode collapsed to a pill (it expands on hover, on a new copy or while the chord is held):
+Island mode: collapsed to a pill, and expanded (on hover, on a new copy or while the chord is held):
 
-<img src="docs/island.png" alt="Collapsed island" width="273">
+<img src="docs/island.png" alt="Collapsed island" width="273">&nbsp;&nbsp;<img src="docs/island-expanded.png" alt="Expanded island" width="546">
 
 Settings apply live and are available in English and Polish:
 
