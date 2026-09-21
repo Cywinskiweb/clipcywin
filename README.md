@@ -117,6 +117,10 @@ Everything lives in `%LOCALAPPDATA%\Clipcywin\settings.json` and is editable fro
 - Passwords typed into browser password fields carry no privacy flags, so only the heuristic can catch them.
 - Some legacy GDI screenshot tools show a black rectangle where the bar is instead of omitting it.
 
+## Contact
+
+Questions, ideas, bug reports: **[cywinskiweb@gmail.com](mailto:cywinskiweb@gmail.com)**. GitHub [issues](https://github.com/Cywinskiweb/clipcywin/issues) work too.
+
 ## Support
 
 Clipcywin is free and open source. If it saves you time, you can [buy me a coffee](https://buymeacoffee.com/jakub_webdev). There is also a button for it in Settings › About.
