@@ -500,6 +500,7 @@ impl App {
         self.hover = None;
         self.preview_item = None;
         self.island = Island::new();
+        self.island_region = None;
 
         let mons = monitors::enumerate();
         self.monitor = monitors::choose(&mons, &self.settings.monitor);
@@ -823,16 +824,18 @@ impl App {
             let half = pill.h.min(pill.w) / 2.0;
             let rad = dip_to_px(half * (1.0 - t) + self.theme.radius.max(6.0).min(half) * t, dpi);
             let region = (dip_to_px(pill.x, dpi), dip_to_px(pill.y, dpi), dip_to_px(pill.w, dpi), dip_to_px(pill.h, dpi), rad);
-            if self.island_region != Some(region) {
-                self.island_region = Some(region);
-                if let Some(m) = &mut self.main {
+            self.island_region = Some(region);
+            if let Some(m) = &mut self.main {
+                if m.region() != Some(region) {
                     m.set_region(Some(region));
                 }
             }
-        } else if self.island_region.is_some() {
+        } else {
             self.island_region = None;
             if let Some(m) = &mut self.main {
-                m.set_region(None);
+                if m.region().is_some() && self.bar_geom.is_none() {
+                    m.set_region(None);
+                }
             }
         }
         let Some(main) = &self.main else { return };

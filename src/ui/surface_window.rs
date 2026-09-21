@@ -135,6 +135,10 @@ impl SurfaceWindow {
         }
     }
 
+    pub fn region(&self) -> Option<(i32, i32, i32, i32, i32)> {
+        self.region
+    }
+
     /// Clip the window (and any blur behind it) to a rounded rectangle given in client px.
     pub fn set_region(&mut self, region: Option<(i32, i32, i32, i32, i32)>) {
         self.region = region;
