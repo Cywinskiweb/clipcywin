@@ -816,9 +816,11 @@ impl App {
 
     pub fn render_main(&mut self) {
         let now = self.now();
-        if let (Some(g), true) = (self.island_geom.clone(), self.settings.island.blur) {
-            // The blur is clipped to the (animated) pill by a window region.
-            let pill = self.island.rect(&g, now);
+        if let Some(g) = self.island_geom.clone() {
+            // The window region follows the (animated) pill: it clips the blur and, more importantly,
+            // lets clicks outside the pill reach the windows underneath (HTTRANSPARENT only works
+            // within one thread, so a transparent window would otherwise swallow them).
+            let pill = self.island.rect(&g, now).inset(-1.0);
             let t = self.island.t.value(now);
             let dpi = g.dpi;
             let half = pill.h.min(pill.w) / 2.0;
