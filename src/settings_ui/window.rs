@@ -11,7 +11,7 @@ use webview2_com::Microsoft::Web::WebView2::Win32::{
     CreateCoreWebView2EnvironmentWithOptions, GetAvailableCoreWebView2BrowserVersionString, ICoreWebView2, ICoreWebView2Controller,
     ICoreWebView2Controller2, ICoreWebView2Environment, COREWEBVIEW2_COLOR,
 };
-use webview2_com::{CreateCoreWebView2ControllerCompletedHandler, CreateCoreWebView2EnvironmentCompletedHandler, WebMessageReceivedEventHandler};
+use webview2_com::{CreateCoreWebView2ControllerCompletedHandler, CreateCoreWebView2EnvironmentCompletedHandler, NavigationStartingEventHandler, NewWindowRequestedEventHandler, WebMessageReceivedEventHandler};
 use windows::core::{Interface, Result, PWSTR};
 use windows::core::BOOL;
 use windows::Win32::Foundation::{HWND, RECT};
@@ -128,6 +128,45 @@ impl SettingsWindow {
                             Ok(())
                         })),
                         &mut token,
+                    )?;
+                    // Links (e.g. the Buy Me a Coffee button) open in the default browser, never inside the settings page.
+                    let mut tok2 = 0i64;
+                    webview.add_NewWindowRequested(
+                        &NewWindowRequestedEventHandler::create(Box::new(move |_wv, args| {
+                            if let Some(args) = args {
+                                let mut p = PWSTR::null();
+                                if args.Uri(&mut p).is_ok() && !p.is_null() {
+                                    let url = p.to_string().unwrap_or_default();
+                                    CoTaskMemFree(Some(p.0 as *const _));
+                                    if url.starts_with("https://") {
+                                        crate::app::shell_open(&url);
+                                    }
+                                }
+                                let _ = args.SetHandled(true);
+                            }
+                            Ok(())
+                        })),
+                        &mut tok2,
+                    )?;
+                    let mut tok3 = 0i64;
+                    webview.add_NavigationStarting(
+                        &NavigationStartingEventHandler::create(Box::new(move |_wv, args| {
+                            if let Some(args) = args {
+                                let mut p = PWSTR::null();
+                                if args.Uri(&mut p).is_ok() && !p.is_null() {
+                                    let url = p.to_string().unwrap_or_default();
+                                    CoTaskMemFree(Some(p.0 as *const _));
+                                    if url.starts_with("http://") || url.starts_with("https://") {
+                                        let _ = args.SetCancel(true);
+                                        if url.starts_with("https://") {
+                                            crate::app::shell_open(&url);
+                                        }
+                                    }
+                                }
+                            }
+                            Ok(())
+                        })),
+                        &mut tok3,
                     )?;
                     let page = html.replace("__DARK__", if dark { "dark" } else { "light" });
                     webview.NavigateToString(WStr::new(&page).pcwstr())?;

@@ -239,12 +239,13 @@ footer{position:sticky;bottom:0;background:var(--bg);padding:12px 0 0;display:fl
 
 <section id="about">
   <h2>About</h2>
-  <div class="stats" id="about"></div>
+  <div class="stats" id="aboutStats"></div>
   <p class="hint">Settings are stored in <code>settings.json</code> in the data folder and applied live.</p>
   <h3>Support the project</h3>
   <p class="hint">Clipcywin is free and open source. If it saves you time, you can buy me a coffee.</p>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="btn primary" id="supportBtn">☕ Buy me a coffee</button>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+    <span id="bmcHost"><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="jakub_webdev" data-color="#BD5FFF" data-emoji="" data-font="Comic" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00"></script></span>
+    <button class="btn primary" id="supportBtn" style="display:none">☕ Buy me a coffee</button>
     <button class="btn" id="repoBtn">Source code on GitHub</button>
   </div>
 </section>
@@ -450,6 +451,8 @@ function renderShelves() {
 }
 document.getElementById('shelfResetPos').addEventListener('click', () => { state.shelves.window_pos = null; schedule(); });
 document.getElementById('supportBtn').addEventListener('click', () => post({ type: 'open_url', url: meta ? meta.support_url : '' }));
+// The official button is injected by the BMC script; if it never appears (offline), show the plain button instead.
+setTimeout(() => { if (!document.querySelector('#bmcHost .bmc-button, #bmcHost a')) document.getElementById('supportBtn').style.display = ''; }, 4000);
 document.getElementById('repoBtn').addEventListener('click', () => post({ type: 'open_url', url: meta ? meta.repo_url : '' }));
 const PRESETS = {
   compact:     { 'bar.height_dip': 40, 'layout.item_width_dip': 180, 'appearance.font_size': 11, 'appearance.corner_radius': 6,  'layout.gap_dip': 4, 'layout.padding_dip': 5 },
@@ -525,7 +528,7 @@ function fmtBytes(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : (
 window.chrome && chrome.webview && chrome.webview.addEventListener('message', ev => {
   const m = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
   if (m.type === 'settings') { state = m.data; meta = m.meta; if (meta.accent) document.documentElement.style.setProperty('--accent', meta.accent); document.documentElement.dataset.theme = meta.dark ? 'dark' : 'light'; applyLang(state.general.language || 'en'); render();
-    document.getElementById('about').innerHTML = `<span>${T('Version')}</span><b>${meta.version}</b><span>WebView2</span><b>${meta.webview_version || 'n/a'}</b><span>${T('Elevated')}</span><b>${meta.is_elevated ? T('yes') : T('no')}</b><span>${T('Renderer')}</span><b>${state.general.renderer}</b>`;
+    document.getElementById('aboutStats').innerHTML = `<span>${T('Version')}</span><b>${meta.version}</b><span>WebView2</span><b>${meta.webview_version || 'n/a'}</b><span>${T('Elevated')}</span><b>${meta.is_elevated ? T('yes') : T('no')}</b><span>${T('Renderer')}</span><b>${state.general.renderer}</b>`;
     document.getElementById('status').textContent = T('Changes apply instantly'); }
   else if (m.type === 'stats') { document.getElementById('stats').innerHTML = `<span>${T('Items')}</span><b>${m.items}</b><span>${T('Pinned')}</span><b>${m.pinned}</b><span>${T('Sensitive')}</span><b>${m.sensitive}</b><span>${T('Images')}</span><b>${m.images}</b><span>${T('Thumbnail cache')}</span><b>${fmtBytes(m.thumb_bytes)}</b><span>${T('Database')}</span><b>${fmtBytes(m.db_bytes)}</b><span>${T('Image files')}</span><b>${fmtBytes(m.image_bytes)}</b>`; }
   else if (m.type === 'applied') { document.getElementById('status').textContent = m.ok ? T('Saved') : ('Error: ' + m.error); }
