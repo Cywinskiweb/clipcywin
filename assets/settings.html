@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en" data-theme="__DARK__">
+<head>
+<meta charset="utf-8">
+<title>Clipcywin Settings</title>
+<style>
+:root{--bg:#f6f6f8;--panel:#ffffff;--fg:#1b1b1f;--fg2:#5f6068;--border:#e2e2e8;--accent:#0078d4;--input:#ffffff;--hover:#eeeef2;--danger:#c42b2b}
+:root[data-theme="dark"]{--bg:#1f1f23;--panel:#27272c;--fg:#f2f2f4;--fg2:#a8a8b2;--border:#3a3a42;--accent:#4cc2ff;--input:#1b1b1f;--hover:#33333a;--danger:#ff6b6b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;color:var(--fg);font:13px "Segoe UI Variable Text","Segoe UI",sans-serif}
+body{display:flex;background:var(--bg)}
+nav{width:200px;padding:16px 8px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;background:var(--panel)}
+nav h1{font-size:15px;margin:4px 12px 14px;font-weight:600}
+nav button{all:unset;padding:8px 12px;border-radius:6px;cursor:pointer;color:var(--fg2)}
+nav button:hover{background:var(--hover)}
+nav button.active{background:var(--hover);color:var(--fg);font-weight:600}
+nav .spacer{flex:1}
+main{flex:1;overflow:auto;padding:20px 28px}
+section{display:none;max-width:640px}
+section.active{display:block}
+h2{font-size:18px;font-weight:600;margin:0 0 14px}
+h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--fg2);margin:22px 0 8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--border)}
+.row label.t{flex:1}
+.row label.t small{display:block;color:var(--fg2);margin-top:2px}
+input[type=text],input[type=number],select,textarea{background:var(--input);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font:inherit;min-width:160px}
+input[type=number]{min-width:90px;width:90px}
+textarea{width:100%;min-height:80px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12px}
+input[type=range]{width:180px;accent-color:var(--accent)}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:40px;height:22px;border-radius:11px;background:var(--border);position:relative;cursor:pointer;flex:none;transition:background .15s;margin:0;vertical-align:middle}
+input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.35);transition:left .15s}
+input[type=checkbox]:checked{background:var(--accent)}
+input[type=checkbox]:checked::after{left:21px}
+input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=color]{width:44px;height:28px;padding:0;border:1px solid var(--border);border-radius:6px;background:var(--input)}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.seg button{all:unset;padding:6px 12px;cursor:pointer;color:var(--fg2)}
+.seg button.on{background:var(--accent);color:#fff}
+.btn{all:unset;padding:7px 14px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--panel)}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+.btn.danger{color:var(--danger)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border);border-radius:16px;cursor:pointer;user-select:none}
+.chip.on{background:var(--accent);color:#fff;border-color:transparent}
+.hint{color:var(--fg2);font-size:12px;margin:8px 0}
+.warn{background:rgba(255,180,0,.12);border:1px solid rgba(255,180,0,.4);padding:8px 10px;border-radius:6px;margin:10px 0;font-size:12px}
+.val{min-width:44px;text-align:right;color:var(--fg2);display:inline-block}
+.diagram{width:240px;height:150px;border:1px solid var(--border);border-radius:8px;position:relative;background:var(--input);overflow:hidden}
+.diagram .tb{position:absolute;left:0;right:0;bottom:0;height:12px;background:var(--border)}
+.diagram .bar{position:absolute;background:var(--accent);border-radius:3px;opacity:.85}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;font-size:12px;color:var(--fg2)}
+.stats b{color:var(--fg)}
+.examples{font-family:"Cascadia Mono",Consolas,monospace;font-size:12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin-top:8px}
+.examples .ok{color:#3aa657}.examples .bad{color:var(--danger)}
+footer{position:sticky;bottom:0;background:var(--bg);padding:12px 0 0;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);margin-top:20px}
+</style>
+</head>
+<body>
+<nav>
+  <h1>Clipcywin</h1>
+  <button data-tab="general" class="active">General</button>
+  <button data-tab="layout">Layout &amp; Mode</button>
+  <button data-tab="appearance">Appearance</button>
+  <button data-tab="hotkeys">Hotkeys</button>
+  <button data-tab="capture">Capture &amp; History</button>
+  <button data-tab="privacy">Privacy</button>
+  <button data-tab="hide">Hide on capture</button>
+  <button data-tab="shelves">Shelves</button>
+  <button data-tab="about">About</button>
+  <div class="spacer"></div>
+  <div class="hint" id="status">Loading…</div>
+</nav>
+<main>
+
+<section id="general" class="active">
+  <h2>General</h2>
+  <div class="row"><label class="t">Start with Windows<small>Adds an entry to the current user's Run key.</small></label><input type="checkbox" data-path="general.autostart"></div>
+  <div class="row"><label class="t">Thumbnail cache<small>GPU memory reserved for image thumbnails.</small></label><span><input type="range" min="2" max="128" data-path="general.thumb_cache_mb"> <span class="val" data-val="general.thumb_cache_mb"></span> MB</span></div>
+  <div class="row"><label class="t">Language</label><select data-path="general.language"><option value="en">English</option><option value="pl">Polski</option></select></div>
+  <div class="row"><label class="t">Log level</label><select data-path="general.log_level"><option value="off">Off</option><option value="error">Error</option><option value="warn">Warn</option><option value="info">Info</option><option value="debug">Debug</option></select></div>
+  <h3>Data</h3>
+  <div class="stats" id="stats"></div>
+  <div style="margin-top:12px;display:flex;gap:8px">
+    <button class="btn" data-action="open_data_folder">Open data folder</button>
+    <button class="btn" data-action="open_logs">Open logs</button>
+    <button class="btn danger" data-action="clear_keep">Clear history (keep pinned)</button>
+    <button class="btn danger" data-action="clear_all">Clear everything</button>
+  </div>
+</section>
+
+<section id="layout">
+  <h2>Layout &amp; Mode</h2>
+  <div class="row"><label class="t">Mode</label><span class="seg" data-seg="mode"><button data-v="bar">Bar</button><button data-v="island">Island</button></span></div>
+  <div data-show="mode=bar">
+    <h3>Bar</h3>
+    <div class="row"><label class="t">Placement<small>Docked reserves screen space like the taskbar. Overlay floats above other windows. On demand stays hidden until you need it.</small></label><span class="seg" data-seg="bar.placement"><button data-v="docked">Docked</button><button data-v="overlay">Overlay</button><button data-v="on_demand">On demand</button></span></div>
+    <div class="row"><label class="t">Edge</label><span class="seg" data-seg="bar.edge"><button data-v="top">Top</button><button data-v="bottom">Bottom</button></span></div>
+    <div class="row"><label class="t">Bar alignment<small>Where a fixed-width bar sits on the screen.</small></label><span class="seg" data-seg="bar.align"><button data-v="left">Left</button><button data-v="center">Center</button><button data-v="right">Right</button></span></div>
+    <div class="row"><label class="t">Width</label><span><span class="seg" data-seg="bar.width.kind"><button data-v="full">Full</button><button data-v="px">Fixed</button></span> <input type="number" min="200" max="8000" step="20" data-path="bar.width.px" data-show="bar.width.kind=px" style="margin-left:8px"> </span></div>
+    <div class="row"><label class="t">Height</label><span><input type="range" min="36" max="160" data-path="bar.height_dip"> <span class="val" data-val="bar.height_dip"></span> px</span></div>
+    <div class="row"><label class="t">Margin from edge<small>Gap between the bar and the screen edge / taskbar (and the sides).</small></label><span><input type="range" min="0" max="120" data-path="bar.margin_dip"> <span class="val" data-val="bar.margin_dip"></span> px</span></div>
+    <div class="row" data-show="bar.placement=overlay"><label class="t">Overlap taskbar<small>Place the bar over the taskbar instead of above it.</small></label><input type="checkbox" data-path="bar.overlap_taskbar"></div>
+    <div class="row" data-show="bar.placement=docked"><label class="t">Always on top (docked)</label><input type="checkbox" data-path="bar.docked_topmost"></div>
+    <div class="row" data-show="bar.placement=on_demand"><label class="t">Show for<small>Seconds the bar stays visible after a copy.</small></label><span><input type="number" min="0.5" max="60" step="0.5" data-path="capture.on_demand_show_secs"> s</span></div>
+    <div class="row" data-show="bar.placement=on_demand"><label class="t">Show when the mouse touches the screen edge</label><input type="checkbox" data-path="capture.edge_trigger"></div>
+  </div>
+  <div data-show="mode=island">
+    <h3>Island</h3>
+    <div class="row"><label class="t">Anchor</label><select data-path="island.anchor"><option value="top_center">Top center</option><option value="top_left">Top left</option><option value="top_right">Top right</option><option value="bottom_center">Bottom center</option><option value="bottom_left">Bottom left</option><option value="bottom_right">Bottom right</option><option value="left_edge">Left edge</option><option value="right_edge">Right edge</option></select></div>
+    <div class="row"><label class="t">Collapsed size</label><span><input type="number" min="48" max="600" data-path="island.collapsed_len_dip"> × <input type="number" min="16" max="96" data-path="island.collapsed_thick_dip"> px</span></div>
+    <div class="row"><label class="t">Margin from edge</label><span><input type="number" min="0" max="200" data-path="island.margin_dip"> px</span></div>
+    <div class="row"><label class="t">Expand on copy for<small>0 = only pulse, never expand automatically.</small></label><span><input type="number" min="0" max="60" step="0.5" data-path="island.expand_on_copy_secs"> s</span></div>
+    <div class="row"><label class="t">Expand on hover</label><input type="checkbox" data-path="island.expand_on_hover"></div>
+    <h3>Island background</h3>
+    <div class="row"><label class="t">Opacity</label><span><input type="range" min="0.2" max="1" step="0.02" data-path="island.opacity"> <span class="val" data-val="island.opacity"></span></span></div>
+    <div class="row"><label class="t">Color<small>Off = theme background.</small></label><span><input type="checkbox" id="islandColorOn"> <input type="color" id="islandColor" style="margin-left:8px;vertical-align:middle"></span></div>
+    <div class="row"><label class="t">Border</label><input type="checkbox" data-path="island.border"></div>
+    <div class="row"><label class="t">Blur behind<small>Acrylic blur clipped to the pill shape.</small></label><input type="checkbox" data-path="island.blur"></div>
+    <div class="row"><label class="t">Row height</label><span><input type="range" min="36" max="160" data-path="bar.height_dip"> <span class="val" data-val="bar.height_dip"></span> px</span></div>
+  </div>
+  <h3>Items</h3>
+  <div class="row"><label class="t">Content alignment<small>Where the items sit inside the bar.</small></label><span class="seg" data-seg="layout.content_align"><button data-v="left">Left</button><button data-v="center">Center</button><button data-v="right">Right</button></span></div>
+  <div class="row"><label class="t">Keep the modifier hint on the left<small>The Win+Ctrl badge stays at the left edge even when items are centered.</small></label><input type="checkbox" data-path="layout.hint_pinned_left"></div>
+  <div class="row"><label class="t">Item style<small>Pill: one line with number and title. Card: two lines with size and source.</small></label><span class="seg" data-seg="layout.item_style"><button data-v="pill">Pill</button><button data-v="card">Card</button></span></div>
+  <div class="row"><label class="t">Monitor</label><select data-path="monitor" id="monitorSel"></select></div>
+  <div class="row"><label class="t">Item width</label><span><input type="range" min="80" max="600" data-path="layout.item_width_dip"> <span class="val" data-val="layout.item_width_dip"></span> px</span></div>
+  <div class="row"><label class="t">Max visible items</label><input type="number" min="1" max="40" data-path="layout.max_visible"></div>
+  <div class="row"><label class="t">Gap / padding</label><span><input type="number" min="0" max="64" data-path="layout.gap_dip"> / <input type="number" min="0" max="64" data-path="layout.padding_dip"> px</span></div>
+  <div class="row"><label class="t">Pinned items first</label><input type="checkbox" data-path="layout.pinned_first"></div>
+  <div class="row"><label class="t">Show number badges</label><input type="checkbox" data-path="layout.show_badges"></div>
+  <div class="row"><label class="t">Show modifier hint (e.g. Win+Ctrl)</label><input type="checkbox" data-path="layout.show_modifier_hint"></div>
+  <div class="row" data-show="layout.item_style=card"><label class="t">Show meta line (size, source)</label><input type="checkbox" data-path="layout.show_meta"></div>
+  <div class="row" data-show="layout.item_style=card"><label class="t">Show source app</label><input type="checkbox" data-path="layout.show_source"></div>
+  <div class="diagram" id="diagram"><div class="tb"></div><div class="bar"></div></div>
+</section>
+
+<section id="appearance">
+  <h2>Appearance</h2>
+  <div class="row"><label class="t">Theme</label><span class="seg" data-seg="appearance.theme"><button data-v="system">System</button><button data-v="dark">Dark</button><button data-v="light">Light</button></span></div>
+  <div class="row"><label class="t">Accent</label><span><span class="seg" data-seg="appearance.accent.kind"><button data-v="windows">Windows</button><button data-v="custom">Custom</button></span> <input type="color" id="accentColor" data-show="appearance.accent.kind=custom" style="margin-left:8px;vertical-align:middle"></span></div>
+  <div class="row"><label class="t">Opacity</label><span><input type="range" min="0.2" max="1" step="0.02" data-path="appearance.opacity"> <span class="val" data-val="appearance.opacity"></span></span></div>
+  <div class="row"><label class="t">Size preset<small>Applies bar height, item width, font size and corner radius at once.</small></label><select id="presetSel"><option value="">Custom…</option><option value="compact">Compact</option><option value="default">Default</option><option value="comfortable">Comfortable</option><option value="large">Large</option><option value="pill">Pill (fully rounded)</option><option value="square">Square (no rounding)</option></select></div>
+  <div class="row"><label class="t">Backdrop<small>Acrylic blurs what is behind the bar. Not used in island mode.</small></label><span class="seg" data-seg="appearance.backdrop"><button data-v="none">None</button><button data-v="acrylic">Acrylic</button><button data-v="mica">Mica</button></span></div>
+  <div class="row"><label class="t">Active item highlight</label><span class="seg" data-seg="appearance.highlight"><button data-v="border">Border</button><button data-v="fill">Fill</button><button data-v="both">Both</button></span></div>
+  <div class="row"><label class="t">Corner radius</label><span><input type="range" min="0" max="40" data-path="appearance.corner_radius"> <span class="val" data-val="appearance.corner_radius"></span></span></div>
+  <div class="row"><label class="t">Font</label><span><input type="text" list="fonts" data-path="appearance.font_family"> <input type="number" min="8" max="24" step="0.5" data-path="appearance.font_size"></span></div>
+  <div class="row"><label class="t">Monospace font (code snippets)</label><input type="text" list="monofonts" data-path="appearance.mono_font"></div>
+  <datalist id="fonts"><option>Segoe UI Variable Text</option><option>Segoe UI</option><option>Calibri</option><option>Bahnschrift</option><option>Inter</option></datalist>
+  <datalist id="monofonts"><option>Cascadia Mono</option><option>Cascadia Code</option><option>Consolas</option><option>JetBrains Mono</option><option>Fira Code</option></datalist>
+  <div class="row"><label class="t">Animations</label><input type="checkbox" data-path="appearance.animations"></div>
+  <div class="row"><label class="t">Hover previews</label><input type="checkbox" data-path="appearance.hover_previews"></div>
+  <h3>Hover preview</h3>
+  <div class="row"><label class="t">Opacity</label><span><input type="range" min="0.2" max="1" step="0.02" data-path="preview.opacity"> <span class="val" data-val="preview.opacity"></span></span></div>
+  <div class="row"><label class="t">Background color<small>Off = theme background.</small></label><span><input type="checkbox" id="previewColorOn"> <input type="color" id="previewColor" style="margin-left:8px;vertical-align:middle"></span></div>
+  <div class="row"><label class="t">Blur behind</label><input type="checkbox" data-path="preview.blur"></div>
+  <div class="row"><label class="t">Border</label><input type="checkbox" data-path="preview.border"></div>
+  <div class="row"><label class="t">Corner radius</label><span><input type="range" min="0" max="40" data-path="preview.corner_radius"> <span class="val" data-val="preview.corner_radius"></span></span></div>
+  <div class="row"><label class="t">Max size<small>Percent of the work area (width / height).</small></label><span><input type="number" min="20" max="100" data-path="preview.max_width_pct"> % / <input type="number" min="20" max="100" data-path="preview.max_height_pct"> %</span></div>
+  <div class="row"><label class="t">Text size<small>0 = same as the bar.</small></label><input type="number" min="0" max="32" step="0.5" data-path="preview.font_size"></div>
+  <div class="row"><label class="t">Hover delay</label><span><input type="range" min="50" max="2000" step="50" data-path="appearance.hover_delay_ms"> <span class="val" data-val="appearance.hover_delay_ms"></span> ms</span></div>
+</section>
+
+<section id="hotkeys">
+  <h2>Hotkeys</h2>
+  <div class="row"><label class="t">Enable number hotkeys<small>Modifier + 1…9, 0 selects the item at that position.</small></label><input type="checkbox" data-path="hotkeys.enabled"></div>
+  <div class="row"><label class="t">Modifiers</label><span class="chips" id="modChips"><span class="chip" data-bit="1">Win</span><span class="chip" data-bit="2">Ctrl</span><span class="chip" data-bit="4">Alt</span><span class="chip" data-bit="8">Shift</span></span></div>
+  <div class="warn" id="winWarn">While Clipcywin runs, Explorer's Win+Ctrl+&lt;number&gt; shortcut (switch to pinned app) is suppressed.</div>
+  <div class="row"><label class="t">Hotkey action</label><span class="seg" data-seg="hotkeys.action"><button data-v="paste">Paste into active window</button><button data-v="copy_only">Copy only</button></span></div>
+  <div class="row"><label class="t">Click action</label><span class="seg" data-seg="hotkeys.click_action"><button data-v="paste">Paste</button><button data-v="copy_only">Copy only</button></span></div>
+  <div class="row"><label class="t">Paste delay<small>Some apps need a moment after the clipboard changes.</small></label><span><input type="number" min="0" max="1000" data-path="hotkeys.paste_delay_ms"> ms</span></div>
+  <div class="row"><label class="t">Highlight badges while modifiers are held</label><input type="checkbox" data-path="hotkeys.show_badges_on_chord"></div>
+  <h3>Toggle shortcut</h3>
+  <div class="row"><label class="t">Enable toggle shortcut<small>Shows/hides the bar (or expands the island).</small></label><input type="checkbox" data-path="hotkeys.toggle_chord_enabled"></div>
+  <div class="row"><label class="t">Toggle key<small>Uses the same modifiers as the hotkeys plus this key.</small></label><select data-path="hotkeys.toggle_chord.vk" data-num><option value="192">` (backtick)</option><option value="32">Space</option><option value="86">V</option><option value="67">C</option><option value="220">\ (backslash)</option><option value="112">F1</option><option value="123">F12</option></select></div>
+</section>
+
+<section id="capture">
+  <h2>Capture &amp; History</h2>
+  <div class="row"><label class="t">Capture clipboard</label><input type="checkbox" data-path="capture.enabled"></div>
+  <div class="row"><label class="t">Text</label><input type="checkbox" data-path="capture.text"></div>
+  <div class="row"><label class="t">Images</label><input type="checkbox" data-path="capture.images"></div>
+  <div class="row"><label class="t">Files</label><input type="checkbox" data-path="capture.files"></div>
+  <div class="row"><label class="t">Max image size</label><span><input type="number" min="1" max="512" data-path="capture.max_image_mb"> MB</span></div>
+  <div class="row"><label class="t">Max text size</label><span><input type="number" min="1" max="16384" data-path="capture.max_text_kb"> KB</span></div>
+  <div class="row"><label class="t">History size</label><span><input type="number" min="1" max="5000" data-path="capture.max_history"> items</span></div>
+  <div class="row"><label class="t">Keep history across restarts</label><input type="checkbox" data-path="capture.persist"></div>
+  <div class="row"><label class="t">Duplicates<small>Anywhere: re-copying an old item moves it to the front.</small></label><span class="seg" data-seg="capture.dedupe"><button data-v="anywhere">Merge anywhere</button><button data-v="consecutive">Only consecutive</button></span></div>
+  <div class="row"><label class="t">Hide while a full-screen app is active</label><input type="checkbox" data-path="capture.hide_on_fullscreen"></div>
+  <div class="row"><label class="t">Keep Windows clipboard history (Win+V) free of Clipcywin pastes</label><input type="checkbox" data-path="capture.skip_windows_history"></div>
+</section>
+
+<section id="privacy">
+  <h2>Privacy</h2>
+  <div class="hint">Passwords copied from browser password fields cannot be detected by the system; the text heuristic below is the only protection there.</div>
+  <div class="row"><label class="t">Clipboard "do not record" flags<small>Password managers set these when copying secrets.</small></label><span class="seg" data-seg="privacy.formats"><button data-v="mark_sensitive">Mask</button><button data-v="skip">Skip entirely</button><button data-v="ignore">Ignore</button></span></div>
+  <div class="row"><label class="t">Mask items copied from password managers</label><input type="checkbox" data-path="privacy.process_detection"></div>
+  <div class="row"><label class="t">Password manager processes<small>One per line.</small></label></div>
+  <textarea data-path="privacy.process_list" data-lines></textarea>
+  <h3>Heuristic</h3>
+  <div class="row"><label class="t">Detect password-like text</label><input type="checkbox" data-path="privacy.heuristic"></div>
+  <div class="row"><label class="t">Sensitivity threshold<small>Lower = more aggressive.</small></label><span><input type="range" min="10" max="100" data-path="privacy.threshold"> <span class="val" data-val="privacy.threshold"></span></span></div>
+  <div class="examples" id="examples"></div>
+  <div class="row"><label class="t">Treat API keys / tokens as sensitive</label><input type="checkbox" data-path="privacy.keys_are_sensitive"></div>
+  <h3>Sensitive items</h3>
+  <div class="row"><label class="t">Keep sensitive items in the database</label><input type="checkbox" data-path="privacy.persist_sensitive"></div>
+  <div class="row"><label class="t">Auto-remove after<small>0 = never.</small></label><span><input type="number" min="0" max="86400" data-path="privacy.ttl_secs"> s</span></div>
+  <div class="row"><label class="t">Clear the clipboard when a sensitive item expires</label><input type="checkbox" data-path="privacy.clear_clipboard_on_expire"></div>
+  <div class="row"><label class="t">Click to reveal</label><span><input type="checkbox" data-path="privacy.click_to_reveal"> for <input type="number" min="1" max="120" data-path="privacy.reveal_secs"> s</span></div>
+</section>
+
+<section id="hide">
+  <h2>Hide on capture</h2>
+  <div class="row"><label class="t">Exclude from screen capture<small>Snipping Tool, Win+Shift+S, PrintScreen, OBS, Teams… simply don't see the bar. Some old GDI-based tools show a black box instead.</small></label><input type="checkbox" data-path="hide.exclude_from_capture"></div>
+  <div class="row"><label class="t">Hide when a screenshot / recording key is pressed<small>PrintScreen, Win+Shift+S, Win+Alt+R, Win+G.</small></label><input type="checkbox" data-path="hide.on_capture_keys"></div>
+  <div class="row"><label class="t">Hide when a capture tool is in the foreground</label><input type="checkbox" data-path="hide.on_capture_foreground"></div>
+  <div class="row"><label class="t">Poll for running capture tools<small>Checks every 2 s; hides for the whole session of e.g. OBS.</small></label><input type="checkbox" data-path="hide.on_capture_procs"></div>
+  <div class="row"><label class="t">Hide for</label><span><input type="number" min="1" max="60" step="0.5" data-path="hide.hide_secs"> s</span></div>
+  <div class="row"><label class="t">Capture tool processes<small>One per line.</small></label></div>
+  <textarea data-path="hide.procs" data-lines></textarea>
+</section>
+
+<section id="shelves">
+  <h2>Shelves</h2>
+  <div class="hint">Drag files, text or images onto the shelf button at the right end of the bar (or onto the open panel). Drag the panel header into another app to drop everything at once; text entries are pasted as one.</div>
+  <div class="row"><label class="t">Enable shelves</label><input type="checkbox" data-path="shelves.enabled"></div>
+  <div class="row"><label class="t">Panel position<small>Relative to the shelf button.</small></label><select data-path="shelves.panel_position"><option value="auto">Auto</option><option value="top">Above</option><option value="bottom">Below</option><option value="left">Left</option><option value="right">Right</option></select></div>
+  <div class="row"><label class="t">Panel width</label><span><input type="range" min="160" max="900" step="10" data-path="shelves.panel_width_dip"> <span class="val" data-val="shelves.panel_width_dip"></span> px</span></div>
+  <div class="row"><label class="t">Visible rows</label><input type="number" min="2" max="30" data-path="shelves.panel_rows"></div>
+  <div class="row"><label class="t">Open the panel while dragging over the button</label><input type="checkbox" data-path="shelves.open_on_drag"></div>
+  <div class="row"><label class="t">Auto-close after<small>0 = stay open until closed.</small></label><span><input type="number" min="0" max="120" step="0.5" data-path="shelves.auto_close_secs"> s</span></div>
+  <div class="row"><label class="t">Panel corner radius</label><span><input type="range" min="0" max="40" data-path="shelves.corner_radius"> <span class="val" data-val="shelves.corner_radius"></span></span></div>
+  <div class="row"><label class="t">Panel position memory<small>The panel can be dragged by its header; it stays where you put it.</small></label><button class="btn" id="shelfResetPos">Reset position</button></div>
+  <div class="row"><label class="t">Text join separator<small>Used when pasting several text entries as one (\n = new line, \t = tab).</small></label><input type="text" data-path="shelves.join_separator" style="min-width:90px;width:90px"></div>
+  <h3>Your shelves</h3>
+  <div id="shelfList"></div>
+  <div style="margin-top:10px"><button class="btn" id="shelfAdd">+ New shelf</button></div>
+</section>
+
+<section id="about">
+  <h2>About</h2>
+  <div class="stats" id="about"></div>
+  <p class="hint">Settings are stored in <code>settings.json</code> in the data folder and applied live.</p>
+  <h3>Support the project</h3>
+  <p class="hint">Clipcywin is free and open source. If it saves you time, you can buy me a coffee.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn primary" id="supportBtn">☕ Buy me a coffee</button>
+    <button class="btn" id="repoBtn">Source code on GitHub</button>
+  </div>
+</section>
+
+<footer>
+  <button class="btn" data-action="revert">Revert</button>
+  <button class="btn" data-action="reset">Reset to defaults</button>
+  <button class="btn primary" data-action="close">Close</button>
+</footer>
+</main>
+
+<script>
+(function(){
+// ---------------------------------------------------------------- i18n
+const PL = {
+  'General': 'Ogólne', 'Layout & Mode': 'Układ i tryb', 'Appearance': 'Wygląd', 'Hotkeys': 'Skróty', 'Capture & History': 'Przechwytywanie i historia',
+  'Privacy': 'Prywatność', 'Hide on capture': 'Ukrywanie przy nagrywaniu', 'Shelves': 'Półki', 'About': 'O programie',
+  'Loading…': 'Wczytywanie…', 'Changes apply instantly': 'Zmiany działają natychmiast', 'Saved': 'Zapisano',
+  'Start with Windows': 'Uruchamiaj z Windows', "Adds an entry to the current user's Run key.": 'Dodaje wpis w kluczu Run bieżącego użytkownika.',
+  'Thumbnail cache': 'Pamięć miniatur', 'GPU memory reserved for image thumbnails.': 'Pamięć zarezerwowana na miniatury obrazów.',
+  'Language': 'Język', 'Log level': 'Poziom logowania', 'Off': 'Wyłączony', 'Error': 'Błędy', 'Warn': 'Ostrzeżenia', 'Info': 'Informacje', 'Debug': 'Debug',
+  'Data': 'Dane', 'Open data folder': 'Otwórz folder danych', 'Open logs': 'Otwórz logi', 'Clear history (keep pinned)': 'Wyczyść historię (zostaw przypięte)', 'Clear everything': 'Wyczyść wszystko',
+  'Mode': 'Tryb', 'Bar': 'Pasek', 'Island': 'Island', 'Placement': 'Umiejscowienie',
+  'Docked reserves screen space like the taskbar. Overlay floats above other windows. On demand stays hidden until you need it.': 'Zadokowany rezerwuje miejsce jak pasek zadań. Nakładka pływa nad innymi oknami. Na żądanie pozostaje ukryty, dopóki go nie potrzebujesz.',
+  'Docked': 'Zadokowany', 'Overlay': 'Nakładka', 'On demand': 'Na żądanie', 'Edge': 'Krawędź', 'Top': 'Góra', 'Bottom': 'Dół',
+  'Bar alignment': 'Wyrównanie paska', 'Where a fixed-width bar sits on the screen.': 'Gdzie na ekranie leży pasek o stałej szerokości.',
+  'Left': 'Lewo', 'Center': 'Środek', 'Right': 'Prawo', 'Width': 'Szerokość', 'Full': 'Pełna', 'Fixed': 'Stała', 'Height': 'Wysokość',
+  'Margin from edge': 'Odstęp od krawędzi', 'Gap between the bar and the screen edge / taskbar (and the sides).': 'Odstęp między paskiem a krawędzią ekranu / paskiem zadań (i bokami).',
+  'Overlap taskbar': 'Nakładaj na pasek zadań', 'Place the bar over the taskbar instead of above it.': 'Umieść pasek na pasku zadań zamiast nad nim.',
+  'Always on top (docked)': 'Zawsze na wierzchu (zadokowany)', 'Show for': 'Pokazuj przez', 'Seconds the bar stays visible after a copy.': 'Ile sekund pasek pozostaje widoczny po skopiowaniu.',
+  'Show when the mouse touches the screen edge': 'Pokazuj, gdy mysz dotknie krawędzi ekranu',
+  'Anchor': 'Kotwica', 'Top center': 'Góra, środek', 'Top left': 'Góra, lewo', 'Top right': 'Góra, prawo', 'Bottom center': 'Dół, środek', 'Bottom left': 'Dół, lewo', 'Bottom right': 'Dół, prawo', 'Left edge': 'Lewa krawędź', 'Right edge': 'Prawa krawędź',
+  'Collapsed size': 'Rozmiar zwinięty', 'Expand on copy for': 'Rozwijaj po skopiowaniu na', '0 = only pulse, never expand automatically.': '0 = tylko puls, bez automatycznego rozwijania.',
+  'Expand on hover': 'Rozwijaj po najechaniu', 'Row height': 'Wysokość wiersza', 'Island background': 'Tło island', 'Opacity': 'Przezroczystość', 'Color': 'Kolor', 'Off = theme background.': 'Wyłączony = tło motywu.',
+  'Border': 'Obramowanie', 'Blur behind': 'Rozmycie tła', 'Acrylic blur clipped to the pill shape.': 'Rozmycie acrylic przycięte do kształtu pigułki.',
+  'Items': 'Elementy', 'Content alignment': 'Wyrównanie zawartości', 'Where the items sit inside the bar.': 'Gdzie elementy leżą wewnątrz paska.',
+  'Keep the modifier hint on the left': 'Trzymaj wskazówkę modyfikatora po lewej', 'The Win+Ctrl badge stays at the left edge even when items are centered.': 'Plakietka Win+Ctrl zostaje przy lewej krawędzi nawet przy wyśrodkowanych elementach.',
+  'Item style': 'Styl elementu', 'Pill: one line with number and title. Card: two lines with size and source.': 'Pigułka: jedna linia z numerem i tytułem. Karta: dwie linie z rozmiarem i źródłem.', 'Pill': 'Pigułka', 'Card': 'Karta',
+  'Monitor': 'Monitor', 'Item width': 'Szerokość elementu', 'Max visible items': 'Maks. widocznych elementów', 'Gap / padding': 'Odstęp / margines wewnętrzny',
+  'Pinned items first': 'Przypięte na początku', 'Show number badges': 'Pokazuj numerki', 'Show modifier hint (e.g. Win+Ctrl)': 'Pokazuj wskazówkę modyfikatora (np. Win+Ctrl)',
+  'Show meta line (size, source)': 'Pokazuj linię meta (rozmiar, źródło)', 'Show source app': 'Pokazuj aplikację źródłową',
+  'Theme': 'Motyw', 'System': 'Systemowy', 'Dark': 'Ciemny', 'Light': 'Jasny', 'Accent': 'Akcent', 'Windows': 'Windows', 'Custom': 'Własny',
+  'Size preset': 'Preset rozmiaru', 'Applies bar height, item width, font size and corner radius at once.': 'Ustawia naraz wysokość paska, szerokość elementu, rozmiar czcionki i promień rogów.',
+  'Custom…': 'Własny…', 'Compact': 'Kompaktowy', 'Default': 'Domyślny', 'Comfortable': 'Wygodny', 'Large': 'Duży', 'Pill (fully rounded)': 'Pigułka (pełne zaokrąglenie)', 'Square (no rounding)': 'Kwadratowy (bez zaokrągleń)',
+  'Backdrop': 'Tło', 'Acrylic blurs what is behind the bar. Not used in island mode.': 'Acrylic rozmywa to, co jest za paskiem. Nieużywane w trybie island.', 'None': 'Brak', 'Acrylic': 'Acrylic', 'Mica': 'Mica',
+  'Active item highlight': 'Podświetlenie aktywnego elementu', 'Fill': 'Wypełnienie', 'Both': 'Oba', 'Corner radius': 'Promień rogów', 'Font': 'Czcionka', 'Monospace font (code snippets)': 'Czcionka o stałej szerokości (kod)',
+  'Animations': 'Animacje', 'Hover previews': 'Podgląd po najechaniu', 'Hover delay': 'Opóźnienie podglądu',
+  'Hover preview': 'Podgląd po najechaniu', 'Background color': 'Kolor tła', 'Max size': 'Maks. rozmiar', 'Percent of the work area (width / height).': 'Procent obszaru roboczego (szerokość / wysokość).', 'Text size': 'Rozmiar tekstu', '0 = same as the bar.': '0 = jak w pasku.',
+  'Enable number hotkeys': 'Włącz skróty numeryczne', 'Modifier + 1…9, 0 selects the item at that position.': 'Modyfikator + 1…9, 0 wybiera element na danej pozycji.', 'Modifiers': 'Modyfikatory',
+  "While Clipcywin runs, Explorer's Win+Ctrl+<number> shortcut (switch to pinned app) is suppressed.": 'Gdy Clipcywin działa, skrót Eksploratora Win+Ctrl+<cyfra> (przełączanie przypiętych aplikacji) jest wyłączony.',
+  'Hotkey action': 'Akcja skrótu', 'Paste into active window': 'Wklej do aktywnego okna', 'Copy only': 'Tylko kopiuj', 'Click action': 'Akcja kliknięcia', 'Paste': 'Wklej',
+  'Paste delay': 'Opóźnienie wklejania', 'Some apps need a moment after the clipboard changes.': 'Niektóre aplikacje potrzebują chwili po zmianie schowka.',
+  'Highlight badges while modifiers are held': 'Podświetlaj numerki przy trzymanych modyfikatorach', 'Toggle shortcut': 'Skrót pokazywania', 'Enable toggle shortcut': 'Włącz skrót pokazywania',
+  'Shows/hides the bar (or expands the island).': 'Pokazuje/ukrywa pasek (lub rozwija island).', 'Toggle key': 'Klawisz przełączania', 'Uses the same modifiers as the hotkeys plus this key.': 'Używa tych samych modyfikatorów co skróty plus ten klawisz.',
+  'Capture clipboard': 'Przechwytuj schowek', 'Text': 'Tekst', 'Images': 'Obrazy', 'Files': 'Pliki', 'Max image size': 'Maks. rozmiar obrazu', 'Max text size': 'Maks. rozmiar tekstu', 'History size': 'Rozmiar historii', 'items': 'elementów',
+  'Keep history across restarts': 'Zachowuj historię między uruchomieniami', 'Duplicates': 'Duplikaty', 'Anywhere: re-copying an old item moves it to the front.': 'Wszędzie: ponowne skopiowanie starego elementu przenosi go na początek.',
+  'Merge anywhere': 'Scalaj wszędzie', 'Only consecutive': 'Tylko kolejne', 'Hide while a full-screen app is active': 'Ukrywaj, gdy aktywna jest aplikacja pełnoekranowa',
+  'Keep Windows clipboard history (Win+V) free of Clipcywin pastes': 'Nie zapisuj wklejeń Clipcywin w historii schowka Windows (Win+V)',
+  'Passwords copied from browser password fields cannot be detected by the system; the text heuristic below is the only protection there.': 'Haseł kopiowanych z pól hasła w przeglądarce system nie oznacza; jedyną ochroną jest poniższa heurystyka tekstu.',
+  'Clipboard "do not record" flags': 'Flagi schowka „nie zapisuj”', 'Password managers set these when copying secrets.': 'Menedżery haseł ustawiają je przy kopiowaniu sekretów.', 'Mask': 'Maskuj', 'Skip entirely': 'Pomijaj całkowicie', 'Ignore': 'Ignoruj',
+  'Mask items copied from password managers': 'Maskuj elementy z menedżerów haseł', 'Password manager processes': 'Procesy menedżerów haseł', 'One per line.': 'Jeden w linii.',
+  'Heuristic': 'Heurystyka', 'Detect password-like text': 'Wykrywaj tekst wyglądający jak hasło', 'Sensitivity threshold': 'Próg czułości', 'Lower = more aggressive.': 'Niżej = agresywniej.',
+  'Treat API keys / tokens as sensitive': 'Traktuj klucze API / tokeny jako poufne', 'Sensitive items': 'Elementy poufne', 'Keep sensitive items in the database': 'Zapisuj elementy poufne w bazie',
+  'Auto-remove after': 'Usuwaj automatycznie po', '0 = never.': '0 = nigdy.', 'Clear the clipboard when a sensitive item expires': 'Czyść schowek, gdy poufny element wygaśnie', 'Click to reveal': 'Kliknij, aby odsłonić', 'for': 'na',
+  'Exclude from screen capture': 'Wyklucz z przechwytywania ekranu', "Snipping Tool, Win+Shift+S, PrintScreen, OBS, Teams… simply don't see the bar. Some old GDI-based tools show a black box instead.": 'Snipping Tool, Win+Shift+S, PrintScreen, OBS, Teams… po prostu nie widzą paska. Niektóre stare narzędzia GDI pokazują czarny prostokąt.',
+  'Hide when a screenshot / recording key is pressed': 'Ukrywaj po wciśnięciu klawisza zrzutu / nagrywania', 'PrintScreen, Win+Shift+S, Win+Alt+R, Win+G.': 'PrintScreen, Win+Shift+S, Win+Alt+R, Win+G.',
+  'Hide when a capture tool is in the foreground': 'Ukrywaj, gdy narzędzie do przechwytywania jest na pierwszym planie', 'Poll for running capture tools': 'Sprawdzaj uruchomione narzędzia do przechwytywania',
+  'Checks every 2 s; hides for the whole session of e.g. OBS.': 'Sprawdza co 2 s; ukrywa na całą sesję np. OBS.', 'Hide for': 'Ukrywaj na', 'Capture tool processes': 'Procesy narzędzi do przechwytywania',
+  'Drag files, text or images onto the shelf button at the right end of the bar (or onto the open panel). Drag the panel header into another app to drop everything at once; text entries are pasted as one.': 'Przeciągnij pliki, tekst lub obrazy na przycisk półki na prawym końcu paska (lub na otwarty panel). Przeciągnij uchwyt panelu do innej aplikacji, aby upuścić wszystko naraz; teksty wklejają się jako jeden.',
+  'Enable shelves': 'Włącz półki', 'Panel position': 'Pozycja panelu', 'Relative to the shelf button.': 'Względem przycisku półki.', 'Auto': 'Auto', 'Above': 'Nad', 'Below': 'Pod',
+  'Panel width': 'Szerokość panelu', 'Visible rows': 'Widoczne wiersze', 'Open the panel while dragging over the button': 'Otwieraj panel podczas przeciągania nad przyciskiem', 'Auto-close after': 'Zamykaj automatycznie po', '0 = stay open until closed.': '0 = otwarty, aż zamkniesz.',
+  'Panel corner radius': 'Promień rogów panelu', 'Panel position memory': 'Pamięć pozycji panelu', 'The panel can be dragged by its header; it stays where you put it.': 'Panel można przeciągać za nagłówek; zostaje tam, gdzie go położysz.', 'Reset position': 'Resetuj pozycję',
+  'Text join separator': 'Separator łączenia tekstów', 'Used when pasting several text entries as one (\\n = new line, \\t = tab).': 'Używany przy wklejaniu kilku tekstów jako jednego (\\n = nowa linia, \\t = tabulator).',
+  'Your shelves': 'Twoje półki', '+ New shelf': '+ Nowa półka', 'Delete': 'Usuń', 'Make default': 'Ustaw jako domyślną', 'item': 'element', 'Delete this shelf and its items?': 'Usunąć tę półkę i jej elementy?',
+  'Remove all unpinned items?': 'Usunąć wszystkie nieprzypięte elementy?', 'Remove ALL items including pinned ones?': 'Usunąć WSZYSTKIE elementy, także przypięte?', 'Reset all settings to defaults?': 'Przywrócić wszystkie ustawienia domyślne?',
+  'Version': 'Wersja', 'Elevated': 'Uprawnienia administratora', 'yes': 'tak', 'no': 'nie', 'Settings are stored in': 'Ustawienia są zapisane w', 'in the data folder and applied live.': 'w folderze danych i działają natychmiast.',
+  'Support the project': 'Wesprzyj projekt', 'Clipcywin is free and open source. If it saves you time, you can buy me a coffee.': 'Clipcywin jest darmowy i open source. Jeśli oszczędza Ci czas, możesz postawić mi kawę.',
+  '☕ Buy me a coffee': '☕ Postaw mi kawę', 'Source code on GitHub': 'Kod źródłowy na GitHubie',
+  'Revert': 'Cofnij', 'Reset to defaults': 'Przywróć domyślne', 'Close': 'Zamknij', 'masked': 'maskowane', 'kept': 'zachowane',
+  'Pinned': 'Przypięte', 'Sensitive': 'Poufne', 'Database': 'Baza danych', 'Image files': 'Pliki obrazów', 'Renderer': 'Renderer',
+};
+let lang = 'en';
+const originals = new Map();
+function T(s) { return lang === 'pl' && PL[s] ? PL[s] : s; }
+function applyLang(l) {
+  lang = l;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const n of nodes) {
+    if (n.parentNode && (n.parentNode.tagName === 'SCRIPT' || n.parentNode.tagName === 'STYLE')) continue;
+    if (!originals.has(n)) originals.set(n, n.nodeValue);
+    const en = originals.get(n); const core = en.trim(); if (!core) continue;
+    const tr = T(core);
+    n.nodeValue = tr === core ? en : en.replace(core, tr);
+  }
+  document.querySelectorAll('[title]').forEach(el => { if (!el.dataset.enTitle) el.dataset.enTitle = el.title; el.title = T(el.dataset.enTitle); });
+  document.documentElement.lang = l;
+}
+
+const post = m => window.chrome && chrome.webview && chrome.webview.postMessage(JSON.stringify(m));
+let state = null, meta = null, timer = null, suppress = false;
+
+const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+const set = (o, p, v) => { const ks = p.split('.'); let a = o; for (let i = 0; i < ks.length - 1; i++) { if (a[ks[i]] == null) a[ks[i]] = {}; a = a[ks[i]]; } a[ks[ks.length - 1]] = v; };
+
+function schedule() { clearTimeout(timer); timer = setTimeout(() => post({ type: 'set_settings', data: state }), 150); }
+
+function bind() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    const p = el.dataset.path;
+    if (el.tagName === 'TEXTAREA' && el.dataset.lines !== undefined) {
+      el.addEventListener('change', () => { set(state, p, el.value.split('\n').map(s => s.trim()).filter(Boolean)); schedule(); });
+    } else if (el.type === 'checkbox') {
+      el.addEventListener('change', () => { set(state, p, el.checked); schedule(); render(); });
+    } else if (el.type === 'range' || el.type === 'number' || el.dataset.num !== undefined) {
+      el.addEventListener('input', () => { const v = parseFloat(el.value); if (!isNaN(v)) { set(state, p, v); schedule(); render(false); } });
+    } else if (el.id === 'monitorSel') {
+      el.addEventListener('change', () => { state.monitor = JSON.parse(el.value); schedule(); });
+    } else {
+      el.addEventListener('change', () => { set(state, p, el.value); schedule(); if (p === 'general.language') applyLang(el.value); render(); });
+    }
+  });
+  document.querySelectorAll('[data-seg]').forEach(seg => {
+    const p = seg.dataset.seg;
+    seg.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      if (p === 'bar.width.kind') { state.bar.width = b.dataset.v === 'full' ? { kind: 'full' } : { kind: 'px', px: state.bar.width.px || 1200 }; }
+      else if (p === 'appearance.accent.kind') { state.appearance.accent = b.dataset.v === 'windows' ? { kind: 'windows' } : { kind: 'custom', rgb: state.appearance.accent.rgb || 0x0078d4 }; }
+      else set(state, p, b.dataset.v);
+      schedule(); render();
+    }));
+  });
+  document.querySelectorAll('#modChips .chip').forEach(c => c.addEventListener('click', () => {
+    const bit = +c.dataset.bit; let m = state.hotkeys.modifiers ^ bit; if (m === 0) m = bit; state.hotkeys.modifiers = m; state.hotkeys.toggle_chord.modifiers = m; schedule(); render();
+  }));
+  document.getElementById('previewColorOn').addEventListener('change', e => { state.preview.color = e.target.checked ? parseInt(document.getElementById('previewColor').value.slice(1), 16) : null; schedule(); render(); });
+  document.getElementById('previewColor').addEventListener('input', e => { if (document.getElementById('previewColorOn').checked) { state.preview.color = parseInt(e.target.value.slice(1), 16); schedule(); } });
+  document.getElementById('islandColorOn').addEventListener('change', e => { state.island.color = e.target.checked ? parseInt(document.getElementById('islandColor').value.slice(1), 16) : null; schedule(); render(); });
+  document.getElementById('islandColor').addEventListener('input', e => { if (document.getElementById('islandColorOn').checked) { state.island.color = parseInt(e.target.value.slice(1), 16); schedule(); } });
+  document.getElementById('accentColor').addEventListener('input', e => { state.appearance.accent = { kind: 'custom', rgb: parseInt(e.target.value.slice(1), 16) }; schedule(); });
+  document.querySelectorAll('nav button[data-tab]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(x => x.classList.remove('active')); b.classList.add('active');
+    document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
+    if (b.dataset.tab === 'general') post({ type: 'get_stats' });
+  }));
+  document.querySelectorAll('[data-action]').forEach(b => b.addEventListener('click', () => {
+    const a = b.dataset.action;
+    if (a === 'clear_keep') { if (confirm(T('Remove all unpinned items?'))) post({ type: 'clear_history', keep_pinned: true }); }
+    else if (a === 'clear_all') { if (confirm(T('Remove ALL items including pinned ones?'))) post({ type: 'clear_history', keep_pinned: false }); }
+    else if (a === 'reset') { if (confirm(T('Reset all settings to defaults?'))) post({ type: 'reset' }); }
+    else post({ type: a });
+  }));
+}
+
+function render(full = true) {
+  suppress = true;
+  document.querySelectorAll('[data-path]').forEach(el => {
+    const p = el.dataset.path; const v = get(state, p);
+    if (el.id === 'monitorSel') return;
+    if (el.tagName === 'TEXTAREA' && el.dataset.lines !== undefined) { if (full) el.value = (v || []).join('\n'); }
+    else if (el.type === 'checkbox') el.checked = !!v;
+    else if (full || document.activeElement !== el) el.value = v == null ? '' : v;
+  });
+  document.querySelectorAll('[data-val]').forEach(el => { const v = get(state, el.dataset.val); el.textContent = typeof v === 'number' ? (Number.isInteger(v) ? v : v.toFixed(2)) : v; });
+  document.querySelectorAll('[data-seg]').forEach(seg => {
+    const p = seg.dataset.seg; const v = get(state, p);
+    seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  });
+  document.querySelectorAll('[data-show]').forEach(el => {
+    const [p, want] = el.dataset.show.split('='); el.style.display = String(get(state, p)) === want ? '' : 'none';
+  });
+  document.querySelectorAll('#modChips .chip').forEach(c => c.classList.toggle('on', (state.hotkeys.modifiers & +c.dataset.bit) !== 0));
+  document.getElementById('winWarn').style.display = (state.hotkeys.modifiers & 3) === 3 && state.hotkeys.enabled ? '' : 'none';
+  document.getElementById('previewColorOn').checked = state.preview.color != null;
+  if (state.preview.color != null) document.getElementById('previewColor').value = '#' + (state.preview.color >>> 0).toString(16).padStart(6, '0');
+  document.getElementById('islandColorOn').checked = state.island.color != null;
+  if (state.island.color != null) document.getElementById('islandColor').value = '#' + (state.island.color >>> 0).toString(16).padStart(6, '0');
+  if (state.appearance.accent.kind === 'custom') document.getElementById('accentColor').value = '#' + (state.appearance.accent.rgb >>> 0).toString(16).padStart(6, '0');
+  renderShelves();
+  const ms = document.getElementById('monitorSel');
+  if (meta && ms.options.length === 0) {
+    ms.add(new Option('Primary', JSON.stringify({ kind: 'primary' })));
+    meta.monitors.forEach(m => ms.add(new Option(`${m.index + 1}: ${m.device.replace('\\\\.\\', '')} ${m.width}×${m.height}${m.primary ? ' (primary)' : ''}`, JSON.stringify({ kind: 'device', value: m.device }))));
+  }
+  ms.value = JSON.stringify(state.monitor); if (!ms.value) ms.selectedIndex = 0;
+  drawDiagram(); drawExamples();
+  suppress = false;
+}
+
+function renderShelves() {
+  const el = document.getElementById('shelfList'); if (!el || !meta) return;
+  el.innerHTML = '';
+  for (const sh of meta.shelves) {
+    const row = document.createElement('div'); row.className = 'row';
+    const count = lang === 'pl' ? `${sh.count} ${sh.count === 1 ? 'element' : (sh.count >= 2 && sh.count <= 4 ? 'elementy' : 'elementów')}` : `${sh.count} item${sh.count === 1 ? '' : 's'}`;
+    row.innerHTML = `<input type="color" value="${sh.color}" data-shelf-color="${sh.id}" title="${T('Color')}"> <input type="text" value="" data-shelf-name="${sh.id}" style="flex:1;min-width:120px"> <span class="hint" style="margin:0 8px">${count}</span> <button class="btn" data-shelf-active="${sh.id}" ${sh.active ? 'disabled' : ''}>${sh.active ? T('Default') : T('Make default')}</button> <button class="btn danger" data-shelf-del="${sh.id}">${T('Delete')}</button>`;
+    row.querySelector('[data-shelf-name]').value = sh.name;
+    el.appendChild(row);
+  }
+  el.querySelectorAll('[data-shelf-name]').forEach(i => i.addEventListener('change', () => post({ type: 'shelf_update', id: +i.dataset.shelfName, name: i.value })));
+  el.querySelectorAll('[data-shelf-color]').forEach(i => i.addEventListener('change', () => post({ type: 'shelf_update', id: +i.dataset.shelfColor, color: parseInt(i.value.slice(1), 16) })));
+  el.querySelectorAll('[data-shelf-active]').forEach(b => b.addEventListener('click', () => post({ type: 'shelf_activate', id: +b.dataset.shelfActive })));
+  el.querySelectorAll('[data-shelf-del]').forEach(b => b.addEventListener('click', () => { if (confirm(T('Delete this shelf and its items?'))) post({ type: 'shelf_delete', id: +b.dataset.shelfDel }); }));
+}
+document.getElementById('shelfResetPos').addEventListener('click', () => { state.shelves.window_pos = null; schedule(); });
+document.getElementById('supportBtn').addEventListener('click', () => post({ type: 'open_url', url: meta ? meta.support_url : '' }));
+document.getElementById('repoBtn').addEventListener('click', () => post({ type: 'open_url', url: meta ? meta.repo_url : '' }));
+const PRESETS = {
+  compact:     { 'bar.height_dip': 40, 'layout.item_width_dip': 180, 'appearance.font_size': 11, 'appearance.corner_radius': 6,  'layout.gap_dip': 4, 'layout.padding_dip': 5 },
+  default:     { 'bar.height_dip': 56, 'layout.item_width_dip': 220, 'appearance.font_size': 12, 'appearance.corner_radius': 8,  'layout.gap_dip': 6, 'layout.padding_dip': 8 },
+  comfortable: { 'bar.height_dip': 64, 'layout.item_width_dip': 240, 'appearance.font_size': 13, 'appearance.corner_radius': 12, 'layout.gap_dip': 8, 'layout.padding_dip': 10 },
+  large:       { 'bar.height_dip': 80, 'layout.item_width_dip': 280, 'appearance.font_size': 14, 'appearance.corner_radius': 14, 'layout.gap_dip': 10, 'layout.padding_dip': 12 },
+  pill:        { 'bar.height_dip': 56, 'layout.item_width_dip': 220, 'appearance.font_size': 12, 'appearance.corner_radius': 40, 'layout.gap_dip': 6, 'layout.padding_dip': 8, 'layout.item_style': 'pill' },
+  square:      { 'bar.height_dip': 56, 'layout.item_width_dip': 220, 'appearance.font_size': 12, 'appearance.corner_radius': 0,  'layout.gap_dip': 6, 'layout.padding_dip': 8, 'layout.item_style': 'card' },
+};
+document.getElementById('presetSel').addEventListener('change', e => {
+  const p = PRESETS[e.target.value]; if (!p) return;
+  for (const k in p) set(state, k, p[k]);
+  schedule(); render(); e.target.value = '';
+});
+document.getElementById('shelfAdd').addEventListener('click', () => {
+  const n = (meta ? meta.shelves.length : 0) + 1;
+  const palette = ['#4cc2ff','#ff8c69','#7ee787','#f5c542','#c678dd','#ff6b9d'];
+  post({ type: 'shelf_create', name: `Shelf ${n}`, color: parseInt(palette[(n - 1) % palette.length].slice(1), 16) });
+});
+
+function drawDiagram() {
+  const d = document.getElementById('diagram'); const b = d.querySelector('.bar'); const W = 240, H = 150, tb = 12;
+  if (state.mode === 'island') {
+    const a = state.island.anchor; const w = 70, h = 16;
+    const pos = { top_center: [(W - w) / 2, 6], top_left: [6, 6], top_right: [W - w - 6, 6], left_edge: [6, (H - tb - 70) / 2], right_edge: [W - 16 - 6, (H - tb - 70) / 2] }[a];
+    const vert = a.endsWith('_edge');
+    b.style.cssText = `left:${pos[0]}px;top:${pos[1]}px;width:${vert ? 16 : w}px;height:${vert ? 70 : h}px;border-radius:9px`;
+  } else {
+    const h = Math.max(6, state.bar.height_dip / 6); const full = state.bar.width.kind === 'full'; const w = full ? W : Math.min(W, state.bar.width.px / 12);
+    const x = full ? 0 : { left: 0, center: (W - w) / 2, right: W - w }[state.bar.align];
+    const m = Math.round((state.bar.margin_dip || 0) / 6);
+    const y = state.bar.edge === 'top' ? m : H - tb - h - m;
+    const w2 = full ? W - 2 * m : w; const x2 = full ? m : Math.min(Math.max(x, m), W - m - w);
+    b.style.cssText = `left:${x2}px;top:${y}px;width:${w2}px;height:${h}px;opacity:${state.bar.placement === 'on_demand' ? .4 : .85}`;
+  }
+}
+
+// JS port of the Rust scoring (kept in sync with privacy/detect.rs) for live examples.
+function score(s, keys) {
+  s = s.trim();
+  const jwt = /^eyJ[^.]{8,}\.[^.]{8,}\.[^.]{8,}$/.test(s);
+  const pref = ['sk-','sk_live_','sk_test_','ghp_','gho_','github_pat_','xoxb-','xoxp-','AKIA','AIza','glpat-','pk_live_'].some(p => s.startsWith(p));
+  if (keys && (jwt || (pref && s.length >= 16 && !/\s/.test(s)))) return 100;
+  const n = [...s].length; if (n < 8 || n > 64 || /\s/.test(s)) return null;
+  const l = s.toLowerCase();
+  if (/^(https?:\/\/|ftp:\/\/|www\.|file:|mailto:)/.test(l) || s.startsWith('\\\\') || /^[a-zA-Z]:[\\/]/.test(s)) return null;
+  if ((s.match(/[\\/]/g) || []).length > 1) return null;
+  if (/^[^@\s]+@[^@\s]+\.[^@\s.]+$/.test(s) || /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return null;
+  if (/^[0-9a-f]+$/i.test(s) && [7,8,12,16,32,40,64,128].includes(n)) return null;
+  if (/^#[0-9a-f]+$/i.test(s) && (n === 7 || n === 9)) return null;
+  const lo = /\p{Ll}/u.test(s), up = /\p{Lu}/u.test(s), di = /\d/.test(s), sy = /[^\p{L}\p{N}\-_.]/u.test(s);
+  if (/^[\d+\-.() ]+$/.test(s)) return null;
+  if (/^\p{L}+$/u.test(s) && !(lo && up && n >= 12)) return null;
+  if (n >= 40 && n % 4 === 0 && /^[A-Za-z0-9+/=]+$/.test(s) && (s.endsWith('=') || (/[A-Z]/.test(s) && /\d/.test(s)))) return keys ? 90 : null;
+  const classes = [lo, up, di, sy].filter(Boolean).length; if (classes < 3) return null;
+  const cnt = {}; for (const b of new TextEncoder().encode(s)) cnt[b] = (cnt[b] || 0) + 1;
+  let H = 0; const N = new TextEncoder().encode(s).length; for (const k in cnt) { const p = cnt[k] / N; H -= p * Math.log2(p); }
+  if (H < 2.8) return null;
+  let sc = 25 * (classes - 2) + Math.min(40, Math.max(0, (H - 2.5) * 30)) + Math.min(20, Math.max(0, (n - 8) * 2));
+  const ch = [...s]; let run = 1, mx = 1; for (let i = 1; i < ch.length; i++) { run = ch[i] === ch[i-1] ? run + 1 : 1; mx = Math.max(mx, run); } if (mx >= 4) sc -= 20;
+  const cls = c => /\p{Ll}/u.test(c) ? 0 : /\p{Lu}/u.test(c) ? 1 : /\d/.test(c) ? 2 : 3;
+  let cr = 1, cm = 1; for (let i = 1; i < ch.length; i++) { cr = cls(ch[i]) === cls(ch[i-1]) ? cr + 1 : 1; cm = Math.max(cm, cr); } if (cm >= 6) sc -= 15;
+  return Math.max(0, Math.min(100, Math.floor(sc)));
+}
+function drawExamples() {
+  const ex = ['Tr0ub4dor&3', 'Password123!', 'xK9#mP2$vL5!qR8', 'correct-horse-battery', 'hello-world_v2', 'user@example.com', 'https://example.com/x', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3'];
+  const el = document.getElementById('examples'); el.innerHTML = '';
+  for (const e of ex) { const sc = score(e, state.privacy.keys_are_sensitive); const on = sc != null && sc >= state.privacy.threshold; el.insertAdjacentHTML('beforeend', `<span class="${on ? 'bad' : 'ok'}">${on ? T('masked') : T('kept')} ${sc == null ? '' : '(' + sc + ')'}</span><span>${e}</span>`); }
+}
+
+function fmtBytes(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : (b / 1024).toFixed(0) + ' KB'; }
+
+window.chrome && chrome.webview && chrome.webview.addEventListener('message', ev => {
+  const m = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
+  if (m.type === 'settings') { state = m.data; meta = m.meta; if (meta.accent) document.documentElement.style.setProperty('--accent', meta.accent); document.documentElement.dataset.theme = meta.dark ? 'dark' : 'light'; applyLang(state.general.language || 'en'); render();
+    document.getElementById('about').innerHTML = `<span>${T('Version')}</span><b>${meta.version}</b><span>WebView2</span><b>${meta.webview_version || 'n/a'}</b><span>${T('Elevated')}</span><b>${meta.is_elevated ? T('yes') : T('no')}</b><span>${T('Renderer')}</span><b>${state.general.renderer}</b>`;
+    document.getElementById('status').textContent = T('Changes apply instantly'); }
+  else if (m.type === 'stats') { document.getElementById('stats').innerHTML = `<span>${T('Items')}</span><b>${m.items}</b><span>${T('Pinned')}</span><b>${m.pinned}</b><span>${T('Sensitive')}</span><b>${m.sensitive}</b><span>${T('Images')}</span><b>${m.images}</b><span>${T('Thumbnail cache')}</span><b>${fmtBytes(m.thumb_bytes)}</b><span>${T('Database')}</span><b>${fmtBytes(m.db_bytes)}</b><span>${T('Image files')}</span><b>${fmtBytes(m.image_bytes)}</b>`; }
+  else if (m.type === 'applied') { document.getElementById('status').textContent = m.ok ? T('Saved') : ('Error: ' + m.error); }
+});
+bind();
+post({ type: 'get_settings' });
+})();
+</script>
+</body>
+</html>
