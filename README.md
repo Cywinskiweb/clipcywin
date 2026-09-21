@@ -22,6 +22,24 @@ Clipcywin keeps your recent copies one keystroke away. It lives as a slim bar ab
 
 **Why another clipboard manager?** Because the existing ones are either heavy web wrappers or feel bolted on. Clipcywin starts in ~50 ms, idles at ~10 MB of RAM with 0 % CPU, and is drawn with the same GPU pipeline Windows uses for its own flyouts.
 
+## Screenshots
+
+The bar above the taskbar: numbered pills, masked passwords, the modifier hint on the left and the shelf button on the right.
+
+![Clipcywin bar](docs/bar.png)
+
+Island mode collapsed to a pill (it expands on hover, on a new copy or while the chord is held):
+
+<img src="docs/island.png" alt="Collapsed island" width="273">
+
+Settings apply live and are available in English and Polish:
+
+| Layout & mode | Appearance |
+|---|---|
+| ![Layout settings](docs/settings-layout.png) | ![Appearance settings](docs/settings-appearance.png) |
+| **Privacy** | **Shelves** |
+| ![Privacy settings](docs/settings-privacy.png) | ![Shelves settings](docs/settings-shelves.png) |
+
 ## Features
 
 ### Display
@@ -102,6 +120,8 @@ Everything lives in `%LOCALAPPDATA%\Clipcywin\settings.json` and is editable fro
 ## Support
 
 Clipcywin is free and open source. If it saves you time, you can [buy me a coffee](https://buymeacoffee.com/jakub_webdev). There is also a button for it in Settings › About.
+
+<a href="https://buymeacoffee.com/jakub_webdev"><img src="docs/bmc-qr.png" alt="Buy me a coffee QR code" width="160"></a>
 
 ## License
 
